@@ -1,0 +1,19 @@
+{
+  "name": "core-system",
+  "version": "1.0.0",
+  "description": "Base system",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jcobarbosa/core-system-nodejs.git"
+  },
+  "author": "jcobarbosa",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jcobarbosa/core-system-nodejs/issues"
+  },
+  "homepage": "https://github.com/jcobarbosa/core-system-nodejs#readme"
+}
