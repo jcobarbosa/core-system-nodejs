@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const BaseModel = require('./baseModel');
 
 const roleSchema = new mongoose.Schema({
   name: { type: String, required: true, unique: true },
@@ -28,5 +29,10 @@ roleSchema.pre('findOneAndUpdate', async function (next) {
     }
     next();
 });
+
+class Role extends BaseModel {
+  static SINGLE_LABEL = 'Permissão';
+  static PLURAL_LABEL = 'Permissões';
+}
 
 module.exports = mongoose.model('Role', roleSchema);

@@ -1,5 +1,9 @@
+const BaseModel = require('./baseModel');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+
+const MODEL_LABEL = 'Usuário';
+const MODELS_LABEL = 'Usuários';
 
 const userSchema = new mongoose.Schema({
   nomeUsuario: { type: String, required: true, unique: true },
@@ -35,5 +39,10 @@ userSchema.pre('findOneAndUpdate', async function (next) {
     }
     next();
 });
+
+class User extends BaseModel {
+  static SINGLE_LABEL = 'Usuário';
+  static PLURAL_LABEL = 'Usuários';
+}
 
 module.exports = mongoose.model('User', userSchema);
