@@ -1,24 +1,23 @@
 const BaseModel = require('./baseModel');
 const mongoose = require('mongoose');
+const { Schema } = mongoose;
 const bcrypt = require('bcrypt');
 
-const MODEL_LABEL = 'Usuário';
-const MODELS_LABEL = 'Usuários';
-
 const userSchema = new mongoose.Schema({
-  nomeUsuario: { type: String, required: true, unique: true },
+  userName: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
-  senha: { type: String, required: true },
-  nomeReal: { type: String, required: true },
-  dataDeNascimento: { type: Date, required: true },
-  ativo: { type: Boolean, default: true },
+  password: { type: String, required: true },
+  fullName: { type: String, required: true },
+  birthDate: { type: Date, required: true },
+  roles: [{ type: Schema.Types.ObjectId, ref: 'Role', required: true }],
+  active: { type: Boolean, default: true },
 });
 
 userSchema.pre('save', async function (next) {
-  if (!this.isModified('senha')) return next();
+  if (!this.isModified('password')) return next();
   try {
     const salt = await bcrypt.genSalt(10);
-    this.senha = await bcrypt.hash(this.senha, salt);
+    this.password = await bcrypt.hash(this.password, salt);
     next();
   } catch (err) {
     next(err);
@@ -28,10 +27,10 @@ userSchema.pre('save', async function (next) {
 userSchema.pre('findOneAndUpdate', async function (next) {
     const update = this.getUpdate();
     
-    if (update.senha) {
+    if (update.password) {
         try {
             const salt = await bcrypt.genSalt(10);
-            update.senha = await bcrypt.hash(update.senha, salt);
+            update.password = await bcrypt.hash(update.password, salt);
             this.setUpdate(update);
         } catch (err) {
             return next(err);
