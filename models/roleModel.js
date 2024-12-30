@@ -2,13 +2,14 @@ const mongoose = require('mongoose');
 const BaseModel = require('./baseModel');
 
 const roleSchema = new mongoose.Schema({
+  code: { type: String, required: true, unique: true },
   name: { type: String, required: true, unique: true },
   description: { type: String }
 });
 
 roleSchema.pre('save', async function (next) {
-  if (!this.isModified('name')) return next();
   try {
+    this.code = this.code.toUpperCase();
     this.name = this.name.toUpperCase();
     next();
   } catch (err) {
@@ -19,13 +20,16 @@ roleSchema.pre('save', async function (next) {
 roleSchema.pre('findOneAndUpdate', async function (next) {
     const update = this.getUpdate();
     
-    if (update.name) {
-        try {
-            update.name = update.name.toUpperCase();
-            this.setUpdate(update);
-        } catch (err) {
-            return next(err);
-        }
+    try {
+      if (update.code) {
+        update.code = update.code.toUpperCase();
+      }
+      if (update.name) {
+        update.name = update.name.toUpperCase();
+      }
+      this.setUpdate(update);
+    } catch (err) {
+        return next(err);
     }
     next();
 });
